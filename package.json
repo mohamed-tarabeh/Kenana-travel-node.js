@@ -1,0 +1,44 @@
+{
+	"name": "kenana-graduation-project",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start:dev": "nodemon server.js",
+		"start:pro": "NODE_ENV=production node server.js"
+	},
+	"keywords": [],
+	"author": "mohamed tarabeh",
+	"license": "ISC",
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"compression": "^1.7.4",
+		"cors": "^2.8.5",
+		"dotenv": "^16.3.1",
+		"express": "^4.18.2",
+		"express-async-handler": "^1.2.0",
+		"express-validator": "^7.0.1",
+		"jsonwebtoken": "^9.0.2",
+		"mongoose": "^7.6.5",
+		"morgan": "^1.10.0",
+		"multer": "^1.4.5-lts.1",
+		"nodemailer": "^6.9.7",
+		"sharp": "^0.32.6",
+		"slugify": "^1.6.6",
+		"stripe": "^14.5.0",
+		"uuid": "^9.0.1"
+	},
+	"devDependencies": {
+		"eslint": "^8.52.0",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-plugin-import": "^2.29.0",
+		"eslint-plugin-jsx-a11y": "^6.7.1",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-prettier": "^5.0.1",
+		"eslint-plugin-react": "^7.33.2",
+		"nodemon": "^3.0.1",
+		"prettier": "^3.0.3"
+	}
+}
