@@ -8,7 +8,7 @@ const tourSchema = new mongoose.Schema(
       required: [true, "Title is required"],
       unique: [true, "Tour must be unique"],
       trim: true,
-      minlength: [32, "Tour name is too short"],
+      minlength: [6, "Tour name is too short"],
       maxlength: [1000, "Tour name is too long"],
     },
     slug: {
