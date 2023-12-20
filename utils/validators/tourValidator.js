@@ -21,7 +21,9 @@ const createTourValidationLayer = [
       await Tour.findOne({ title: req.body.title }).then((duplicatedTitle) => {
         if (duplicatedTitle) {
           return Promise.reject(
-            new Error("tour is already exists with same title name, enter another one")
+            new Error(
+              "tour is already exists with same title name, enter another one"
+            )
           );
         }
       });
@@ -78,6 +80,16 @@ const createTourValidationLayer = [
         }
       })
     ),
+  check("durations").notEmpty().withMessage("tour duration is required"),
+  check("maxGuests")
+    .notEmpty()
+    .withMessage("tour maximum guest count is required")
+    .isNumeric(),
+  check("minimumAge")
+    .notEmpty()
+    .withMessage("tour minimum age of guests is required")
+    .isNumeric(),
+
   validationMiddleware,
 ];
 
