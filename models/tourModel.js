@@ -8,8 +8,8 @@ const tourSchema = new mongoose.Schema(
       required: [true, "Title is required"],
       unique: [true, "Tour must be unique"],
       trim: true,
-      minlength: [3, "Tour name is too short"],
-      maxlength: [32, "Tour name is too long"],
+      minlength: [32, "Tour name is too short"],
+      maxlength: [1000, "Tour name is too long"],
     },
     slug: {
       type: String,
@@ -23,8 +23,8 @@ const tourSchema = new mongoose.Schema(
     description: {
       type: String,
       required: [true, "Description is required"],
-      minlength: [10, "Tour description is too short"],
-      maxlength: [100, "Tour description is too long"],
+      minlength: [100, "Tour description is too short"],
+      maxlength: [2000, "Tour description is too long"],
       trim: true,
     },
     price: {

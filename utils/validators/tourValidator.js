@@ -13,9 +13,9 @@ const createTourValidationLayer = [
   check("title")
     .notEmpty()
     .withMessage("tour title is require")
-    .isLength({ max: 32 })
+    .isLength({ max: 1000 })
     .withMessage("too long tour title")
-    .isLength({ min: 3 })
+    .isLength({ min: 32 })
     .withMessage("too short tour title")
     .custom(async (val, { req }) => {
       await Tour.findOne({ title: req.body.title }).then((duplicatedTitle) => {
@@ -38,7 +38,7 @@ const createTourValidationLayer = [
     .withMessage("please enter tour description..")
     .isLength({ min: 10 })
     .withMessage("tour description is too short")
-    .isLength({ max: 100 })
+    .isLength({ max: 4000 })
     .withMessage("tour description is too long"),
   check("price")
     .notEmpty()
@@ -57,9 +57,9 @@ const createTourValidationLayer = [
   check("program")
     .notEmpty()
     .withMessage("tour program is required")
-    .isLength({ min: 20 })
+    .isLength({ min: 32 })
     .withMessage("tour program is too short")
-    .isLength({ max: 200 })
+    .isLength({ max: 2000 })
     .withMessage("tour program is too long"),
   check("bringItems").optional(),
   check("notBringItems").optional(),
