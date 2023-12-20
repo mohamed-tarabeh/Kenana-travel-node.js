@@ -15,7 +15,7 @@ const createTourValidationLayer = [
     .withMessage("tour title is require")
     .isLength({ max: 1000 })
     .withMessage("too long tour title")
-    .isLength({ min: 32 })
+    .isLength({ min: 6 })
     .withMessage("too short tour title")
     .custom(async (val, { req }) => {
       await Tour.findOne({ title: req.body.title }).then((duplicatedTitle) => {
