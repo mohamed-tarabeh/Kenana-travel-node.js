@@ -64,8 +64,8 @@ const createTourValidationLayer = [
   check("bringItems").optional(),
   check("notBringItems").optional(),
   check("suitableFor").optional(),
-  check("imageCover").notEmpty().withMessage("tour image cover is required"),
-  check("gallary").notEmpty().withMessage("at least one image is needed"),
+  // check("imageCover").notEmpty().withMessage("tour image cover is required"),
+  // check("gallary").notEmpty().withMessage("at least one image is needed"),
   check("tourGuide")
     .isMongoId()
     .withMessage("invalid tour guide id")

@@ -147,14 +147,14 @@ tourSchema.pre("save", function (next) {
 
 const setImageUrl = (doc) => {
   if (doc.imageCover) {
-    const imgUrl = `${process.env.BASE_URL}/tours/${doc.imageCover}`;
+    const imgUrl = `${doc.imageCover}`;
     doc.imageCover = imgUrl;
   }
 
   if (doc.gallary) {
     const imagesUrl = [];
     doc.gallary.forEach((image) => {
-      const imgUrl = `${process.env.BASE_URL}/tours/${image}`;
+      const imgUrl = `${image}`;
       imagesUrl.push(imgUrl);
     });
     doc.gallary = imagesUrl;

@@ -6,7 +6,10 @@ const authController = require("../services/authService");
 const userValidationLayer = require("../utils/validators/userValidation");
 const toursRoute = require("./tourRoute");
 
-// make all routes accessible by logged in users 
+// un protected route
+router.route("/").get(userController.getAllUsers);
+
+// make all routes accessible by logged in users
 router.use(authController.protect);
 
 /////////////////////// User /////////////////////////
@@ -29,10 +32,7 @@ router.put(
   userController.updateLoggedUserData
 );
 
-router.post(
-  "/logout",
-  userController.deleteLoggedUserData
-);
+router.post("/logout", userController.deleteLoggedUserData);
 
 router.use("/:userId/tours", toursRoute);
 
@@ -50,22 +50,18 @@ router.put(
   userController.rejectGuidesJoinRequestes
 );
 
-
 router.put(
   "/update-password/:id",
   userValidationLayer.updateUserPasswordValidator,
   userController.updateUserPassword
 );
 
-router
-  .route("/")
-  .get(userController.getAllUsers)
-  .post(
-    userController.uploadTourImageCover,
-    userController.resizeImg,
-    userValidationLayer.createUserValidator,
-    userController.createUser
-  );
+router.post(
+  userController.uploadTourImageCover,
+  userController.resizeImg,
+  userValidationLayer.createUserValidator,
+  userController.createUser
+);
 
 router
   .route("/:id")

@@ -1,12 +1,26 @@
 const express = require("express");
 
 const router = express.Router({ mergeParams: true });
+const multer = require("multer");
 
 const tourController = require("../services/tourServices");
 const authController = require("../services/authService");
 const tourValidationLayer = require("../utils/validators/tourValidator");
 const reviewRoute = require("./reviewRoute");
 const bookingRoute = require("./bookingRoute");
+
+const storage = multer.memoryStorage();
+
+//////////////////////////////
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb("invalid image file!", false);
+  }
+};
+const uploads = multer({ storage, fileFilter });
+//////////////////////////////
 
 router.use("/:toursId/reviews", reviewRoute);
 router.use("/:tourId/booking", bookingRoute);
@@ -32,7 +46,7 @@ router
   )
   .put(
     authController.protect,
-    authController.allowedTo("tour guide","admin"),
+    authController.allowedTo("tour guide", "admin"),
     tourController.uploadTourImages,
     tourController.resizeTourImages,
     tourValidationLayer.updateTourValidationLayer,
@@ -51,8 +65,8 @@ router
     authController.protect,
     authController.allowedTo("admin"),
     tourController.getAllToursRequest
-);
-  
+  );
+
 router
   .route("/admin/requests/approve/:tourId")
   .put(
@@ -61,13 +75,18 @@ router
     tourController.approveTourRequestes
   );
 
-  router
-    .route("/admin/requests/reject/:tourId")
-    .put(
-      authController.protect,
-      authController.allowedTo("admin"),
-      tourController.rejectTourRequestes
-    );
+router
+  .route("/admin/requests/reject/:tourId")
+  .put(
+    authController.protect,
+    authController.allowedTo("admin"),
+    tourController.rejectTourRequestes
+  );
+
+router.post(
+  "/upload-image",
+  uploads.array("image", 5),
+  tourController.uploadImage
+);
 
 module.exports = router;
- 
