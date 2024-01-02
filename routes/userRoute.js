@@ -1,10 +1,24 @@
 const express = require("express");
+const multer = require("multer");
 
 const router = express.Router();
 const userController = require("../services/userServices");
 const authController = require("../services/authService");
 const userValidationLayer = require("../utils/validators/userValidation");
 const toursRoute = require("./tourRoute");
+
+//////////////////////////////
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb("invalid image file!", false);
+  }
+};
+const uploads = multer({ storage, fileFilter });
+//////////////////////////////
 
 // un protected route
 router.route("/").get(userController.getAllUsers);
@@ -35,6 +49,12 @@ router.put(
 router.post("/logout", userController.deleteLoggedUserData);
 
 router.use("/:userId/tours", toursRoute);
+
+router.post(
+  "/upload-image",
+  uploads.single("image"),
+  userController.uploadProfileImg
+);
 
 /////////////////////// Admin /////////////////////////
 router.use(authController.allowedTo("admin"));

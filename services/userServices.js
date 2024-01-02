@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const sharp = require("sharp");
 const asyncHandler = require("express-async-handler");
 const { v4: uuidv4 } = require("uuid");
+const cloudinary = require("../cloudinary");
 
 const User = require("../models/userModel");
 const factory = require("./handlersFactory");
@@ -294,6 +295,147 @@ const rejectGuidesJoinRequestes = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    user upload profile image
+// @route   PUT /api/v1/users/upload-image
+// @access  Private/user
+
+// const uploadProfileImg = async (req, res) => {
+//   const { tourId } = req.body;
+//   const files = req.files;
+
+//   if (!tourId) {
+//     return res
+//       .status(401)
+//       .json({ success: false, message: "Tour ID required!" });
+//   }
+
+//   if (!files || files.length === 0) {
+//     return res
+//       .status(401)
+//       .json({ success: false, message: "No files were uploaded" });
+//   }
+
+//   try {
+//     const uploadedUrls = await Promise.all(
+//       files.map(async (file, index) => {
+//         if (!file || file.size === 0) {
+//           // Skip empty files
+//           return null;
+//         }
+
+//         console.log(`Uploading file ${index + 1} with size ${file.size} bytes`);
+
+//         return new Promise((resolve, reject) => {
+//           const uploadStream = cloudinary.uploader
+//             .upload_stream({ resource_type: "auto" }, (error, result) => {
+//               if (error) {
+//                 console.error(`Error uploading file ${index + 1}:`, error);
+//                 reject(error);
+//               } else {
+//                 console.log(`File ${index + 1} uploaded successfully`);
+//                 resolve(result.url);
+//               }
+//             })
+//             .end(file.buffer);
+
+//           uploadStream.on("finish", () => {
+//             // Nothing specific needs to be done here, as the result is handled in the callback
+//           });
+
+//           uploadStream.on("error", (error) => {
+//             console.error(`Error uploading file ${index + 1}:`, error);
+//             reject(error);
+//           });
+//         });
+//       })
+//     );
+
+//     if (uploadedUrls.length === 0) {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "All files were empty" });
+//     }
+
+//     // Update the tour with the uploaded URLs
+//     const update = await Tour.findByIdAndUpdate(
+//       tourId,
+//       { imageCover: uploadedUrls[0], gallary: uploadedUrls.slice(1) },
+//       { new: true }
+//     );
+
+//     res
+//       .status(201)
+//       .json({ success: true, message: "Your profile has been updated!" });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ success: false, message: "Server error, try again later" });
+//     console.log("Error while uploading profile image", error.message);
+//   }
+// };
+
+const uploadProfileImg = async (req, res) => {
+  const userId = req.user._id; // Assuming userId and name are provided
+  const file = req.file; // Assuming only one file is uploaded for the profile image
+
+  if (!userId ) {
+    return res
+      .status(401)
+      .json({ success: false, message: "You are not logged in, please login and continue" });
+  }
+
+  if (!file || file.size === 0) {
+    return res
+      .status(401)
+      .json({ success: false, message: "No file was uploaded" });
+  }
+
+  try {
+    console.log(`Uploading file with size ${file.size} bytes`);
+
+    const uploadedUrl = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader
+        .upload_stream({ resource_type: "auto" }, (error, result) => {
+          if (error) {
+            console.error("Error uploading file:", error);
+            reject(error);
+          } else {
+            console.log("File uploaded successfully");
+            resolve(result.url);
+          }
+        })
+        .end(file.buffer);
+
+      uploadStream.on("finish", () => {
+        // Nothing specific needs to be done here, as the result is handled in the callback
+      });
+
+      uploadStream.on("error", (error) => {
+        console.error("Error uploading file:", error);
+        reject(error);
+      });
+    });
+
+    // Update the user profile with the uploaded URL and name
+    const updatedUserProfile = await User.findByIdAndUpdate(
+      userId,
+      { profileImg: uploadedUrl },
+      { new: true }
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Your profile has been updated!",
+      data: updatedUserProfile,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Server error, try again later" });
+    console.log("Error while uploading profile image", error.message);
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -310,4 +452,5 @@ module.exports = {
   getAllGuidesJoinRequestes,
   approveGuidesJoinRequestes,
   rejectGuidesJoinRequestes,
+  uploadProfileImg,
 }; 
