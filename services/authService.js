@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("../cloudinary");
 
 const AppError = require("../utils/appError");
 const User = require("../models/userModel");
@@ -432,6 +433,59 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   res.status(200).json({ token });
 });
 
+const uploadIdPhoto = async (req, res) => {
+  const { user } = req;
+  if (!user)
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized access!" });
+
+  const files = req.files;
+
+  if (!files || files.length === 0) {
+    return res
+      .status(401)
+      .json({ success: false, message: "No files were uploaded" });
+  }
+
+  try {
+    const uploadedUrls = await Promise.all(
+      files.map(async (file, index) => {
+        if (!file || file.size === 0) {
+          return null;
+        }
+
+        const result = await cloudinary.uploader.upload(file.path, {
+          public_id: `${user._id}_profile_${index + 1}`, // Unique public ID for each image
+          width: 500,
+          height: 500,
+          crop: "fill",
+        });
+
+        return result.url;
+      })
+    );
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { idPhoto: uploadedUrls }, // Assuming `idPhoto` is an array field in the User model
+      { new: true }
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Your profile has been updated!",
+      data: updatedUser,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Server error, try again later" });
+    console.log("Error while uploading profile images", error.message);
+  }
+};
+
+
 module.exports = {
   signUp,
   signUpVerifyCode,
@@ -444,4 +498,5 @@ module.exports = {
   signUpTourGuide,
   uploadTourGuideIdPhoto,
   resizeTourGuideIdPhoto,
+  uploadIdPhoto,
 };
