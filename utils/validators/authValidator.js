@@ -60,7 +60,7 @@ const signUpUserValidator = [
 ];
 
 const logInUserValidator = [
-  check("login")
+  check("email")
     .notEmpty()
     .withMessage("User email or phone number is required"),
 

@@ -213,14 +213,14 @@ const signUpTourGuide = asyncHandler(async (req, res, next) => {
 // @access  Public
 const login = asyncHandler(async (req, res, next) => {
   // Check if login and password are in the request body
-  if (!req.body.login || !req.body.password) {
+  if (!req.body.email || !req.body.password) {
     return next(
       new AppError("email or phone number and password are required", 400)
     );
   }
 
   // Check if the login field is an email or phone number
-  const loginIdentifier = req.body.login;
+  const loginIdentifier = req.body.email;
 
   // Use a regex or other logic to determine if it's an email or phone number
   const isEmail = /^\S+@\S+\.\S+$/.test(loginIdentifier);
