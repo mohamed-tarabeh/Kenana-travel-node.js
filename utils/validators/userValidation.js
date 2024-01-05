@@ -77,7 +77,7 @@ const createUserValidator = [
 const updateUserValidator = [
   check("id").isMongoId().withMessage("Invalid tour id format"),
 
-  check("username")
+  check("fullName")
     .optional()
     .custom((val, { req }) => {
       req.body.slug = slugify(val);
@@ -85,8 +85,7 @@ const updateUserValidator = [
     }),
 
   check("email")
-    .notEmpty()
-    .withMessage("user email is required")
+    .optional()
     .isEmail()
     .withMessage("Invalid email format"),
 
