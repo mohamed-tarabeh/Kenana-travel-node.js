@@ -141,12 +141,7 @@ const updateLoggedUserData = asyncHandler(async (req, res, next) => {
   // find user based on paylod and detect filds that user will update
   const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
-    {
-      fullName: req.body.fullName,
-      email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
-      profileImg: req.body.profileImg,
-    },
+    req.body,
     { new: true }
   );
 
