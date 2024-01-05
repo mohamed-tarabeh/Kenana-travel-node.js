@@ -60,7 +60,6 @@ const updateUser = asyncHandler(async (req, res, next) => {
       email: req.body.email,
       phoneNumber: req.body.phoneNumber,
       role: req.body.role,
-      profileImg: req.body.profileImg,
     },
     {
       new: true,

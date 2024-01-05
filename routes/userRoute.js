@@ -77,6 +77,7 @@ router.put(
 );
 
 router.post(
+  "/",
   userController.uploadTourImageCover,
   userController.resizeImg,
   userValidationLayer.createUserValidator,

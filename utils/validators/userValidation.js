@@ -70,7 +70,7 @@ const createUserValidator = [
     .isIn(["user", "tour guide", "admin"])
     .withMessage("user role should be user or tour guide or admin"),
 
-  check("profileImg").notEmpty().withMessage("your profile image is required"),
+  // check("profileImg").notEmpty().withMessage("your profile image is required"),
   validationMiddleware,
 ];
 
