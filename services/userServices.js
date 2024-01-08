@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 const cloudinary = require("../cloudinary");
 
 const User = require("../models/userModel");
+const Tour = require("../models/tourModel");
 const factory = require("./handlersFactory");
 const AppError = require("../utils/appError");
 const sendEmail = require("../utils/sendEmail");
@@ -98,7 +99,25 @@ const updateUserPassword = asyncHandler(async (req, res, next) => {
 // @desc    delete specific user
 // @route   delete /api/v1/users/:id
 // @access  Private
-const deleteUser = factory.deleteOne(User);
+const deleteUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const deletedUser = await User.findOneAndDelete({ _id: id });
+
+  // delete realated tours when admin delete guide 
+  if (deletedUser)
+  {
+    if (deletedUser.role === "tour guide") {
+      const relatedToursToGuide = await Tour.deleteMany({ tourGuide:id });
+      if (!relatedToursToGuide) {
+        console.log("not found ************")
+      }
+      console.log(relatedToursToGuide)
+    }
+    res.status(200).json({ message: ` successfully deleted` });
+  } else {
+    return next(new AppError(`No Document for this id ${id}`, 404));
+  }
+});
 
 // @desc    get logged user data
 // @route   Get /api/v1/users/getMe
