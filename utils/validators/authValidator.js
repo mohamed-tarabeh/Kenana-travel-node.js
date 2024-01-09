@@ -98,7 +98,7 @@ const signUpTourGuideValidator = [
     .withMessage(
       "Description is required, please describe you and your travels"
     )
-    .isLength({ min: 6, max: 24 })
+    .isLength({ min: 10, max: 300 })
     .withMessage("description must be between 6 and 24 characters"),
 
   // check("idPhoto").notEmpty().withMessage("ID photo is required"),
