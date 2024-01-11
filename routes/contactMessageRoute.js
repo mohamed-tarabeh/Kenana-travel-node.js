@@ -16,6 +16,11 @@ router.use(authController.protect, authController.allowedTo("admin"));
 
 router.get("/admin", contactController.getAllContacts);
 
+router
+  .route("/admin/:id")
+  .get(contactController.getSpecificContact)
+  .delete(contactController.deleteSpecificContact);
+
 router.post(
   "/admin/:messageId/reply",
   bookingValidationLayer.replayToContactMessageValidation,

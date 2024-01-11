@@ -24,6 +24,16 @@ const sendContactMessage = asyncHandler(async (req, res, next) => {
 // @access  protected / admin
 const getAllContacts = factory.getAll(Contact);
 
+// @desc    admin get all contacts
+// @route   GET /api/v1/contact/admin/:id
+// @access  protected / admin
+const getSpecificContact = factory.getOne(Contact);
+
+// @desc    admin get all contacts
+// @route   GET /api/v1/contact/admin/:id
+// @access  protected / admin
+const deleteSpecificContact = factory.deleteOne(Contact);
+
 // @desc    admin send a message replay
 // @route   POST /api/v1/contact/admin/:messageId/replay
 // @access  protected /admin
@@ -70,5 +80,7 @@ const replayToContactMessage = asyncHandler(async (req, res, next) => {
 module.exports = {
   sendContactMessage,
   getAllContacts,
+  getSpecificContact,
   replayToContactMessage,
+  deleteSpecificContact,
 };
