@@ -59,7 +59,7 @@ router
   )
   .put(
     authController.allowedTo("user", "admin"),
-    bookingValidationLayer.getSpecificBookingValidator,
+    bookingValidationLayer.updateSpecificBookingValidator,
     bookingController.updateBooking
   )
   .delete(
