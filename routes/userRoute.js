@@ -42,7 +42,7 @@ router.put(
 
 router.put(
   "/updateMe",
-  userValidationLayer.updateLoggedUserDataValidator,
+  // userValidationLayer.updateLoggedUserDataValidator,
   userController.updateLoggedUserData
 );
 
