@@ -40,7 +40,12 @@ reviewSchema.virtual("avatar", {
 });
 
 reviewSchema.pre(/^find/, function (next) {
-  this.populate({ path: "user", select: "username" });
+  this.populate({ path: "user", select: "fullName" });
+  next();
+});
+
+reviewSchema.pre(/^find/, function (next) {
+  this.populate({ path: "tour", select: "title" });
   next();
 });
 
