@@ -22,6 +22,9 @@ const uploads = multer({ storage, fileFilter });
 
 // un protected route
 router.route("/").get(userController.getAllUsers);
+router
+  .route("/guide/:guideId")
+  .get(userController.getSpecificGuide);
 
 // make all routes accessible by logged in users
 router.use(authController.protect);

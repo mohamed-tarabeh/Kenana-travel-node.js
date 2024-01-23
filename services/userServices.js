@@ -43,6 +43,20 @@ const getAllUsers = factory.getAll(User, "User");
 // @access  private / admin
 const getSpecificUser = factory.getOne(User);
 
+// @desc    get specific user
+// @route   get /api/v1/user/:guideId
+// @access  private / admin
+const getSpecificGuide = asyncHandler(async (req, res, next) => {
+  const { guideId } = req.params;
+
+  const guide = await User.findById(guideId);
+
+  if (!guide) {
+    return next(new AppError(`no tour guide for this id ${guideId}`, 404));
+  }
+  res.status(200).json({ success: true, data: guide });
+});
+
 // @desc    create user tour
 // @route   post /api/v1/users
 // @access  private / admin
@@ -453,6 +467,7 @@ module.exports = {
   createUser,
   getAllUsers,
   getSpecificUser,
+  getSpecificGuide,
   updateUser,
   deleteUser,
   uploadTourImageCover,

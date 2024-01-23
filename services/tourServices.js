@@ -329,7 +329,7 @@ const createFilterObj = (req, res, next) => {
 };
 
 const uploadTourImages = uploadMixofImages([
-  { name: "imageCover", maxCount: 1 },
+  // { name: "imageCover", maxCount: 1 },
   { name: "gallary", maxCount: 5 },
 ]);
 
